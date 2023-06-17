@@ -4,7 +4,7 @@
 //rock paper or scissors
 
 function getComputerChoice(){
-    console.log(random);
+    let random = Math.floor(Math.random()*3);
     if(random === 0){
         return "Rock";
     }
