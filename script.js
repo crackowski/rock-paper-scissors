@@ -16,21 +16,19 @@ function getComputerChoice(){
     }
 }
 
-//i put the computers choice inside a variable instead
-//of calling the function.
-//the user will input the choice via prompt, and
-//to make the choice case-insensitive i used toLowerCase()
+//declared two variables that will hold players input and computer input
+//the user will input the choice via prompt
 
-let computerSelection = getComputerChoice();
-let playerSelection = prompt("Rock, paper, scissors?");
-playerSelection = playerSelection.toLowerCase();
+let computerSelection;
+let playerSelection;
+
 
 //created function play round that accepts two parameters, user input
 //and random computer input. Uses combination of if and switch statements
 //to figure out who wins
 
 function playRound(playerSelection, computerSelection){
-    console.log(playerSelection + " " + computerSelection);
+    
     if(playerSelection === computerSelection)
     {
         return "It's a tie!";
@@ -63,14 +61,44 @@ function playRound(playerSelection, computerSelection){
 
     }
 }
-console.log(playRound(playerSelection, computerSelection));
 
+//Added game() function which repeats the playRound func. 5 times
+//it keeps score of who wins or loses and tells you at the end
+//who won/lost, if it's a tie no one gets a point and the game
+//will continue for an extra round until there are 5 rounds
+//of wins and losses
 
 function game(){
-    let win = 0, loss = 0;
-    for(let i = 1; i <= 5; i++)
+    let win = 0;
+    let loss = 0;
+    let n = 5;
+
+    for(let i = 1; i <= n; i++)
     {
-        
+        playerSelection = prompt("Rock, paper, scissors?");
+        playerSelection = playerSelection.toLowerCase();
+        computerSelection = getComputerChoice();
+        let result = playRound(playerSelection, computerSelection);
+        if(result.includes("win")){
+            console.log(result);
+            win++;
+        }
+        else if(result.includes("lose")){
+            console.log(result)
+            loss++;
+        }
+        else{
+            console.log(result)
+            n++;
+        }
+    }
+    console.log("The score is: " + win + "-" + loss)
+
+    if(win > loss){
+        console.log("You win!");
+    }
+    else{
+        console.log("You lose!");
     }
 }
 
