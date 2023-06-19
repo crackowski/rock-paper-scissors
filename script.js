@@ -1,105 +1,99 @@
-//function to make computer pick randomly out of three option
-//will generate a random integer out of 0-2
-//depending on which integer it generates it will pick
-//rock paper or scissors
-
-function getComputerChoice(){
-    let random = Math.floor(Math.random()*3);
-    if(random === 0){
-        return "rock";
-    }
-    else if(random === 1){
-        return "paper";
-    }
-    else{
-        return "scissors";
-    }
-}
-
-//declared two variables that will hold players input and computer input
-//the user will input the choice via prompt
-
-let computerSelection;
 let playerSelection;
+let computerSelection;
 
+let buttons = document.querySelectorAll("button");
 
-//created function play round that accepts two parameters, user input
-//and random computer input. Uses combination of if and switch statements
-//to figure out who wins
+let wins = document.querySelector(".wins");
+wins.textContent = 0;
 
-function playRound(playerSelection, computerSelection){
-    
-    if(playerSelection === computerSelection)
-    {
-        return "It's a tie!";
+let losses = document.querySelector(".losses");
+losses.textContent = 0;
+
+let result = document.createElement("p");
+let div = document.querySelector("div");
+let whoBeatWho = document.querySelector(".whoBeatWho");
+
+let winCounter = 0;
+let lossCounter = 0;
+
+function getComputerChoice() {
+    let random = Math.floor(Math.random() * 3);
+    if (random === 0) {
+      return "rock";
+    } else if (random === 1) {
+      return "paper";
+    } else {
+      return "scissors";
+    }
+  }
+
+function game(){ 
+    computerSelection = getComputerChoice();
+    console.log(playerSelection + " " + computerSelection)
+    if(playerSelection === computerSelection){
+         whoBeatWho.textContent = "It's a tie";
     }
     else if(playerSelection === "rock"){
         switch(computerSelection){
-            case "scissors":
-                return "You win, rock beats scissors";
             case "paper":
-                return "You lose, paper beats rock";
+                whoBeatWho.textContent = "You lose, paper beats rock!";
+                lossCounter++;
+                losses.textContent++;
+                break;
+            case "scissors":
+                whoBeatWho.textContent = "You win, rock beats scissors!";
+                winCounter++;
+                wins.textContent++;
+                break;
         }
-
     }
     else if(playerSelection === "paper"){
         switch(computerSelection){
+            case "rock":
+                whoBeatWho.textContent = "You win, paper beats rock!";
+                winCounter++;
+                wins.textContent++;
+                break;
             case "scissors":
-                return "You lose, scissors beat paper";
-            case "rock":
-                return "You win, paper beats rock";
+                whoBeatWho.textContent = "You lose, scissors beat paper!";
+                lossCounter++;
+                losses.textContent++;
+                break;
         }
-
-    }
-    else {
-        switch(computerSelection){
-            case "paper":
-                return "You win, scissors beat paper";
-            case "rock":
-                return "You lose, rock beats scissor";
-        }
-
-    }
-}
-
-//Added game() function which repeats the playRound func. 5 times
-//it keeps score of who wins or loses and tells you at the end
-//who won/lost, if it's a tie no one gets a point and the game
-//will continue for an extra round until there are 5 rounds
-//of wins and losses
-
-function game(){
-    let win = 0;
-    let loss = 0;
-    let n = 5;
-
-    for(let i = 1; i <= n; i++)
-    {
-        playerSelection = prompt("Rock, paper, scissors?");
-        playerSelection = playerSelection.toLowerCase();
-        computerSelection = getComputerChoice();
-        let result = playRound(playerSelection, computerSelection);
-        if(result.includes("win")){
-            console.log(result);
-            win++;
-        }
-        else if(result.includes("lose")){
-            console.log(result)
-            loss++;
-        }
-        else{
-            console.log(result)
-            n++;
-        }
-    }
-    console.log("The score is: " + win + "-" + loss)
-
-    if(win > loss){
-        console.log("You win!");
     }
     else{
-        console.log("You lose!");
+        switch(computerSelection){
+            case "rock":
+                whoBeatWho.textContent = "You lose, rock beats scissors!";
+                lossCounter++;
+                losses.textContent++;
+                break;
+            case "paper":
+                whoBeatWho.textContent = "You win, scissors beat paper!";
+                winCounter++;
+                wins.textContent++;
+                break;
+        }
+    }
+    if(winCounter === 5 || lossCounter === 5){
+        if(winCounter > lossCounter)
+        {
+            result.textContent = "You win the game!";
+        }
+        else{
+            result.textContent = "You lost the game!";
+        }
+        div.appendChild(result);
+        buttons.forEach(button => {
+            button.disabled = true;
+        });
     }
 }
 
-game();
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        playerSelection = button.textContent;
+        game();
+    });
+});
